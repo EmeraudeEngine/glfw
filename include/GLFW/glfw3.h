@@ -6381,6 +6381,24 @@ GLFWAPI int glfwVulkanSupported(void);
  */
 GLFWAPI const char** glfwGetRequiredInstanceExtensions(uint32_t* count);
 
+#define GLFW_EM_CUSTOM_VERSION
+
+/**
+ * @brief Writes keyboard state to a byte array.
+ * @param window A pointer to the GLFW window.
+ * @param state A pointer to the byte array.
+ * @return void
+ */
+GLFWAPI void glfwGetKeyboardState(GLFWwindow* window, char* state);
+
+/**
+ * @brief Writes mouse button state to a byte array.
+ * @param window A pointer to the GLFW window.
+ * @param state A pointer to the byte array.
+ * @return void
+ */
+GLFWAPI void glfwGetMouseButtonState(GLFWwindow* window, char* state);
+
 #if defined(VK_VERSION_1_0)
 
 /*! @brief Returns the address of the specified Vulkan instance function.

@@ -1521,3 +1521,46 @@ GLFWAPI uint64_t glfwGetTimerFrequency(void)
     return _glfwPlatformGetTimerFrequency();
 }
 
+GLFWAPI void glfwGetKeyboardState(GLFWwindow* handle, char* state)
+{
+	//_GLFW_REQUIRE_INIT();
+
+	_GLFWwindow* window = (_GLFWwindow*) handle;
+	//assert(window != NULL);
+
+	for ( int32_t key = GLFW_KEY_SPACE; key < GLFW_KEY_LAST + 1; key++ )
+	{
+		if (window->keys[key] == _GLFW_STICK)
+		{
+			window->keys[key] = GLFW_RELEASE;
+
+			state[key] = GLFW_PRESS;
+		}
+		else
+		{
+			state[key] = window->keys[key];
+		}
+	}
+}
+
+GLFWAPI void glfwGetMouseButtonState(GLFWwindow* handle, char* state)
+{
+	//_GLFW_REQUIRE_INIT();
+
+	_GLFWwindow* window = (_GLFWwindow*) handle;
+	//assert(window != NULL);
+
+	for ( int32_t button = GLFW_MOUSE_BUTTON_1; button < GLFW_MOUSE_BUTTON_LAST + 1; button++ )
+	{
+		if (window->mouseButtons[button] == _GLFW_STICK)
+		{
+			window->mouseButtons[button] = GLFW_RELEASE;
+
+			state[button] = GLFW_PRESS;
+		}
+		else
+		{
+			state[button] = window->mouseButtons[button];
+		}
+	}
+}
