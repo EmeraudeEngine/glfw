@@ -1265,7 +1265,9 @@ static void setCursorImage(_GLFWwindow* window,
             scale = 2;
         }
 
-        image = wlCursor->images[cursorWayland->currentImage];
+        // The frame index is advanced modulo the 1x cursor's image count
+        // (incrementCursorImage), but the HiDPI cursor may have fewer frames
+        image = wlCursor->images[cursorWayland->currentImage % wlCursor->image_count];
         buffer = wl_cursor_image_get_buffer(image);
         if (!buffer)
             return;
