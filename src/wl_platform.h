@@ -50,6 +50,7 @@ typedef struct wl_display* (* PFN_wl_display_connect)(const char*);
 typedef void (* PFN_wl_display_disconnect)(struct wl_display*);
 typedef int (* PFN_wl_display_roundtrip)(struct wl_display*);
 typedef int (* PFN_wl_display_get_fd)(struct wl_display*);
+typedef int (* PFN_wl_display_get_error)(struct wl_display*);
 typedef int (* PFN_wl_display_prepare_read)(struct wl_display*);
 typedef struct wl_event_queue* (* PFN_wl_display_create_queue)(struct wl_display*);
 typedef void (* PFN_wl_event_queue_destroy)(struct wl_event_queue*);
@@ -76,6 +77,7 @@ typedef void (* PFN_wl_proxy_set_queue)(struct wl_proxy*,struct wl_event_queue*)
 #define wl_display_disconnect _glfw.wl.client.display_disconnect
 #define wl_display_roundtrip _glfw.wl.client.display_roundtrip
 #define wl_display_get_fd _glfw.wl.client.display_get_fd
+#define wl_display_get_error _glfw.wl.client.display_get_error
 #define wl_display_prepare_read _glfw.wl.client.display_prepare_read
 #define wl_display_create_queue _glfw.wl.client.display_create_queue
 #define wl_display_prepare_read_queue _glfw.wl.client.display_prepare_read_queue
@@ -555,6 +557,7 @@ typedef struct _GLFWlibraryWayland
         PFN_wl_display_disconnect                   display_disconnect;
         PFN_wl_display_roundtrip                    display_roundtrip;
         PFN_wl_display_get_fd                       display_get_fd;
+        PFN_wl_display_get_error                    display_get_error;
         PFN_wl_display_prepare_read                 display_prepare_read;
         PFN_wl_display_create_queue                 display_create_queue;
         PFN_wl_display_prepare_read_queue           display_prepare_read_queue;

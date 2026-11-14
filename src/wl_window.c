@@ -1330,6 +1330,18 @@ static GLFWbool flushDisplay(void)
     return GLFW_TRUE;
 }
 
+// Requests the closing of every window: the connection to the display is lost
+//
+static void requestCloseOnDisplayLoss(void)
+{
+    _GLFWwindow* window = _glfw.windowListHead;
+    while (window)
+    {
+        _glfwInputWindowCloseRequest(window);
+        window = window->next;
+    }
+}
+
 static int translateKey(uint32_t scancode)
 {
     if (scancode < sizeof(_glfw.wl.keycodes) / sizeof(_glfw.wl.keycodes[0]))
@@ -1394,6 +1406,15 @@ static void handleEvents(double* timeout)
 
     while (!event)
     {
+        // A display in error dispatches nothing more and its queues never empty.
+        // The reader loops below and the one of libdecor ("prepare the read, else
+        // dispatch what is pending") would then never end: do not enter them.
+        if (wl_display_get_error(_glfw.wl.display) != 0)
+        {
+            requestCloseOnDisplayLoss();
+            return;
+        }
+
         if (_glfw.wl.libdecor.context)
         {
             // Dispatch unconditionally because it also processes non-Wayland events
@@ -1403,8 +1424,15 @@ static void handleEvents(double* timeout)
 
         while (wl_display_prepare_read(_glfw.wl.display) != 0)
         {
-            if (wl_display_dispatch_pending(_glfw.wl.display) > 0)
+            const int count = wl_display_dispatch_pending(_glfw.wl.display);
+            if (count > 0)
                 event = GLFW_TRUE;
+            else if (count < 0)
+            {
+                // The dispatch failed: the display is in error, no read is prepared
+                requestCloseOnDisplayLoss();
+                return;
+            }
         }
 
         // If an error other than EAGAIN happens, we have likely been disconnected

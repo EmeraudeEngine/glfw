@@ -573,6 +573,8 @@ int _glfwInitWayland(void)
         _glfwPlatformGetModuleSymbol(_glfw.wl.client.handle, "wl_display_roundtrip");
     _glfw.wl.client.display_get_fd = (PFN_wl_display_get_fd)
         _glfwPlatformGetModuleSymbol(_glfw.wl.client.handle, "wl_display_get_fd");
+    _glfw.wl.client.display_get_error = (PFN_wl_display_get_error)
+        _glfwPlatformGetModuleSymbol(_glfw.wl.client.handle, "wl_display_get_error");
     _glfw.wl.client.display_prepare_read = (PFN_wl_display_prepare_read)
         _glfwPlatformGetModuleSymbol(_glfw.wl.client.handle, "wl_display_prepare_read");
     _glfw.wl.client.display_create_queue = (PFN_wl_display_create_queue)
@@ -619,6 +621,7 @@ int _glfwInitWayland(void)
         !_glfw.wl.client.display_disconnect ||
         !_glfw.wl.client.display_roundtrip ||
         !_glfw.wl.client.display_get_fd ||
+        !_glfw.wl.client.display_get_error ||
         !_glfw.wl.client.display_prepare_read ||
         !_glfw.wl.client.display_create_queue ||
         !_glfw.wl.client.display_prepare_read_queue ||
